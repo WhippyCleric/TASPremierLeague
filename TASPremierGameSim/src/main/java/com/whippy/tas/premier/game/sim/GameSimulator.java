@@ -9,6 +9,8 @@ import com.whippy.tas.premier.beans.Position;
 import com.whippy.tas.premier.beans.Stats;
 import com.whippy.tas.premier.beans.Team;
 import com.whippy.tas.premier.game.builders.PlayerBuilder;
+import com.whippy.tas.premier.game.builders.TeamBuilder;
+import com.whippy.tas.premier.game.report.MatchReport;
 import com.whippy.tas.premier.util.Utils;
 
 public class GameSimulator {
@@ -23,6 +25,10 @@ public class GameSimulator {
 				players.add(PlayerBuilder.buildPlayer(attributes));
 			}
 		}
-		new Team("team1", players);
+		TeamBuilder teamBuilder = new TeamBuilder(players);
+		Team team1 = teamBuilder.buildTeam("team1");
+		Team team2 = teamBuilder.buildTeam("team2");
+		MatchReport matchReport = new MatchReport(team1, team2);
+		System.out.println(matchReport);
 	}
 }

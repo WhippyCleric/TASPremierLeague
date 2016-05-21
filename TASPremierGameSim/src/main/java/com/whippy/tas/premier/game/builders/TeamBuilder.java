@@ -25,6 +25,6 @@ public class TeamBuilder {
 				theTeam.add(player);
 			}
 		}
-		return new Team(teamName, theTeam);
+		return new Team(teamName, theTeam.subList(0, 11), theTeam.subList(11, 15));
 	}
 }

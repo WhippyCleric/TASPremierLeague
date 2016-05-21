@@ -20,8 +20,9 @@ public class PlayerBuilder {
 		List<Position> positions = new ArrayList<Position>();
 		
 		for (String position : positionArray) {
-			if(position.equals("Goal") || position.equals("Keeper")){
+			if(position.equals("Goal")){
 				positions.add(Position.GOALKEEPER);
+			}else if(position.equals("Keeper")){
 			}else{						
 				positions.add(Position.valueOf(position.toUpperCase()));
 			}
