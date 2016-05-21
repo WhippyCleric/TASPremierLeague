@@ -80,50 +80,43 @@ public class Generator {
 	
 	private static Stats setPassingStat(List<Position> positions, Random rand, Stats stats) {
 		if(positions.contains(Position.MIDFIELD)){
-			//Midfielders must have a passing stat of at least 40
-			stats.setPassing(rand.nextInt((100 - 40) + 1) + 40);
+			stats.setPassing(Utils.getGaussian(80, 10));
 		}else{
-			stats.setPassing(rand.nextInt((100) + 1));
+			stats.setPassing(Utils.getGaussian(50, 50));
 		}
 		return stats;
 	}
 	
 	private static Stats setShootingStat(List<Position> positions, Random rand, Stats stats) {
 		if(positions.contains(Position.FORWARD)){
-			//Defenders must have a shooting stat of at least 40
-			stats.setShooting(rand.nextInt((100 - 40) + 1) + 40);
+			stats.setShooting(Utils.getGaussian(80, 10));
 		}else if(positions.contains(Position.MIDFIELD)){
-			//Midfielders must have a shooting stat of at least 25
-			stats.setShooting(rand.nextInt((100 - 25) + 1) + 25);
+			stats.setShooting(Utils.getGaussian(60, 20));
 		}else{
-			stats.setShooting(rand.nextInt((80) + 1));
+			stats.setShooting(Utils.getGaussian(30, 30));
 		}
 		return stats;
 	}
 	
 	private static Stats setTacklingStat(List<Position> positions, Random rand, Stats stats) {
 		if(positions.contains(Position.DEFENSE)){
-			//Defenders must have a tackling stat of at least 40
-			stats.setTackling(rand.nextInt((100 - 40) + 1) + 40);
+			stats.setTackling(Utils.getGaussian(80, 10));
 		}else if(positions.contains(Position.MIDFIELD)){
 			//Midfielders must have a tackling stat of at least 25
-			stats.setTackling(rand.nextInt((100 - 25) + 1) + 25);
+			stats.setTackling(Utils.getGaussian(60, 20));
 		}else{
-			stats.setTackling(rand.nextInt((100) + 1));
+			Utils.getGaussian(40, 40);
 		}
 		return stats;
 	}
 	
 	private static Stats setSpeedStat(int age, Random rand, Stats stats) {
 		if(age > 33){
-			//Players over can only have max speed of 70
-			stats.setSpeed(rand.nextInt((70 - 10) + 1) + 10);
+			stats.setSpeed(Utils.getGaussian(30, 10));
 		}else if (age > 28){
-			//Players over can only have max speed of 85
-			stats.setSpeed(rand.nextInt((85 - 10) + 1) + 10);
+			stats.setSpeed(Utils.getGaussian(50, 10));
 		}else{
-			//Player under 28 can have max speed of 100
-			stats.setSpeed(rand.nextInt((100-10) + 1)+10);
+			stats.setSpeed(Utils.getGaussian(70, 20));
 		}
 		return stats;
 	}
