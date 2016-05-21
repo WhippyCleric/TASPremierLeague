@@ -66,9 +66,81 @@ public class GameSimulator {
 		return matchReport;
 	}
 	
-	public static void figureOutAction(Team team1, Team team2, MatchReport report, int time){
+	public static void runRandomGoal(Team home, Team away, MatchReport report, int time){
+		//In the event of a random goal currently only scoring stat is taken into account
+		double team1ScoreChance = getScoringStat(home);
+		double team2ScoreChance = getScoringStat(away);
+		int scorer = rand.nextInt((int) Math.floor(team1ScoreChance + team2ScoreChance));
+		if(scorer<team1ScoreChance){
+			report.homeGoal();
+			report.pushMatchEvent(new MatchEvent(" for " + home.getTeamName(), time, MatchAction.GOAL));
+		}else{
+			report.awayGoal();				
+			report.pushMatchEvent(new MatchEvent(" for " + away.getTeamName(), time, MatchAction.GOAL));
+		}
+	}
+	
+	public static void runCorner(Team home, Team away, MatchReport report, int time){
+		//Figure out whose corner
+		double team1CornerChance = getCornerStat(home);
+		double team2CornerChance = getCornerStat(away);
+		int cornerOwner = rand.nextInt((int) Math.floor(team1CornerChance + team2CornerChance));
+		if(cornerOwner<team1CornerChance){
+			report.homeGoal();
+			report.pushMatchEvent(new MatchEvent(" for " + home.getTeamName(), time, MatchAction.CORNER));
+		}else{
+			report.awayGoal();				
+			report.pushMatchEvent(new MatchEvent(" for " + away.getTeamName(), time, MatchAction.CORNER));
+		}
+	}
+	
+	
+	public static void figureOutAction(Team home, Team away, MatchReport report, int time){
 		MatchAction action = actionMap.get(rand.nextInt(actionMap.size()-1));
-		report.pushMatchEvent(new MatchEvent("", time, action));
+		if(action.equals(MatchAction.GOAL)){
+			runRandomGoal(home, away, report, time);
+		}else if(action.equals(MatchAction.CORNER)){
+			runCorner(home, away, report, time);
+		}else{			
+			report.pushMatchEvent(new MatchEvent("", time, action));
+		}
+	}
+	
+	public static double getScoringStat(Team team){
+		double score = 0;
+		List<Player> players = team.getTheTeam();
+		for (Player player : players) {
+			Stats stats = player.getStats();
+			if(stats.getPositions().contains(Position.FORWARD)){
+				score = score + stats.getShooting();
+			}else if(stats.getPositions().contains(Position.MIDFIELD)){
+				score = score + (stats.getShooting() * 0.5);
+			}else if(stats.getPositions().contains(Position.DEFENSE)){
+				score = score + (stats.getShooting() * 0.2);
+			}
+		}
+		return score;
+	}
+	
+
+	public static double getCornerStat(Team team){
+		double corner = 0;
+		List<Player> players = team.getTheTeam();
+		//Corners will are weighted so that low tackling of defenders and midfield is bad, and good passing for attacking half is good...
+		for (Player player : players) {
+			Stats stats = player.getStats();
+			if(stats.getPositions().contains(Position.FORWARD)){
+				corner = corner + stats.getPassing();
+				corner = corner + stats.getTackling() * 0.2;
+			}else if(stats.getPositions().contains(Position.MIDFIELD)){
+				corner = corner + (stats.getPassing() * 0.5);
+				corner = corner + stats.getTackling() * 0.5;
+			}else if(stats.getPositions().contains(Position.DEFENSE)){
+				corner = corner + (stats.getPassing() * 0.2);
+				corner = corner + stats.getTackling();
+			}
+		}
+		return corner;
 	}
 	
 	
