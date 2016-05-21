@@ -42,8 +42,8 @@ public class GameSimulator {
 		}
 
 		TeamBuilder teamBuilder = new TeamBuilder(players);
-		Team team1 = teamBuilder.buildTeam("team1");
-		Team team2 = teamBuilder.buildTeam("team2");
+		Team team1 = teamBuilder.buildTeam("Team TNR");
+		Team team2 = teamBuilder.buildTeam("Team Free States");
 		buildActionMap();
 
 

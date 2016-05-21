@@ -17,7 +17,7 @@ public class Generator {
 
 	private static final String FIRST_NAMES = "first.txt";
 	private static final String LAST_NAMES = "last.txt";
-	private static final int NUMBER_OF_PLAYERS = 1000;
+	private static final int NUMBER_OF_PLAYERS = 800;
 	private static final int MIN_AGE = 16;
 	private static final int MAX_AGE = 38;
 
