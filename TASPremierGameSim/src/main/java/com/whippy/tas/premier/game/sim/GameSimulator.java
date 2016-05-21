@@ -69,18 +69,66 @@ public class GameSimulator {
 		return matchReport;
 	}
 	
-	public static void runRandomGoal(Team home, Team away, MatchReport report, int time){
+	public static void runRandomShot(Team home, Team away, MatchReport report, int time){
 		//In the event of a random goal currently only scoring stat is taken into account
 		double team1ScoreChance = getScoringStat(home);
 		double team2ScoreChance = getScoringStat(away);
 		int scorer = rand.nextInt((int) Math.floor(team1ScoreChance + team2ScoreChance));
 		if(scorer<team1ScoreChance){
-			report.homeGoal();
-			report.pushMatchEvent(new MatchEvent(" for " + home.getTeamName(), time, MatchAction.GOAL));
+			runShotChance(home,away,report,time,true);
 		}else{
-			report.awayGoal();				
-			report.pushMatchEvent(new MatchEvent(" for " + away.getTeamName(), time, MatchAction.GOAL));
+			runShotChance(home,away,report,time,false);
 		}
+	}
+	
+	public static void runShotChance(Team home, Team away, MatchReport report, int time, boolean isHome){
+		Player goaly;
+		Player shooter;
+		if(isHome){
+			goaly = findGoalKeeper(away);
+			shooter = findShooter(home);
+			report.pushMatchEvent(new MatchEvent(" by " + shooter.getName() + " for " + home.getTeamName(), time, MatchAction.SHOT));
+		}else{
+			goaly = findGoalKeeper(home);			
+			shooter = findShooter(away);
+			report.pushMatchEvent(new MatchEvent(" by " + shooter.getName() + " for " + away.getTeamName(), time, MatchAction.SHOT));
+		}
+		int scoreChance = rand.nextInt(shooter.getStats().getShooting() + goaly.getStats().getGoalKeeping());
+		if(scoreChance<shooter.getStats().getShooting()){
+			//goal
+			if(isHome){
+				report.homeGoal();
+				report.pushMatchEvent(new MatchEvent(" by " + shooter.getName() + " for " + home.getTeamName(), time, MatchAction.GOAL));
+			}else{
+				report.awayGoal();
+				report.pushMatchEvent(new MatchEvent(" by " + shooter.getName() + " for " + away.getTeamName(), time, MatchAction.GOAL));
+			}
+		}else{
+			//save
+			if(isHome){
+				report.pushMatchEvent(new MatchEvent(" by " + goaly.getName() + " for " + away.getTeamName(), time, MatchAction.SAVE));
+			}else{
+				report.pushMatchEvent(new MatchEvent(" by " + goaly.getName() + " for " + home.getTeamName(), time, MatchAction.SAVE));
+			}
+		}
+	}
+	
+	public static Player findShooter(Team team){
+		List<Player> possibleShooters = new ArrayList<Player>();
+		List<Player> players = team.getTheTeam();
+		for (Player player : players) {
+			if(player.getStats().getPositions().contains(Position.FORWARD)){
+				possibleShooters.add(player);
+				possibleShooters.add(player);
+				possibleShooters.add(player);
+			}else if(player.getStats().getPositions().contains(Position.MIDFIELD)){
+				possibleShooters.add(player);
+				possibleShooters.add(player);				
+			}else if(player.getStats().getPositions().contains(Position.DEFENSE)){
+				possibleShooters.add(player);
+			}
+		}
+		return possibleShooters.get(rand.nextInt(possibleShooters.size()));
 	}
 	
 	public static void runCorner(Team home, Team away, MatchReport report, int time){
@@ -98,7 +146,7 @@ public class GameSimulator {
 	}
 		
 	
-	public static void runPenaltyFoul(Team home, Team away, MatchReport report, int time, boolean isHome){
+	public static void runFoul(Team home, Team away, MatchReport report, int time, boolean isHome){
 		double defenseDirty = 0;
 		if(isHome){
 			defenseDirty = getDirtyDefenseStat(home);
@@ -107,17 +155,54 @@ public class GameSimulator {
 		}
 		int red = rand.nextInt(2000);
 		int yellow = rand.nextInt(1000);
+		boolean isRed = false;
+		boolean isYellow = false;
 		if(red<defenseDirty){
-			//red
+			isRed = true;
 		}else if(yellow<defenseDirty){
-			//yellow
+			isYellow = true;
 		}
-		
+		//find player
+		if(isRed || isYellow){
+			Player cardedPlayer;
+			if(isHome){
+				cardedPlayer = findDirtiestBackPlayer(home);
+			}else{
+				cardedPlayer = findDirtiestBackPlayer(away);
+			}
+			if(isRed && isHome){
+				report.pushMatchEvent(new MatchEvent(" for " + cardedPlayer.getName() + " " + home.getTeamName(), time, MatchAction.RED));
+			}else if(isRed){
+				report.pushMatchEvent(new MatchEvent(" for " + cardedPlayer.getName() + " " + away.getTeamName(), time, MatchAction.RED));				
+			}
+			if(isYellow && isHome){
+				report.pushMatchEvent(new MatchEvent(" for " + cardedPlayer.getName() + " " + home.getTeamName(), time, MatchAction.YELLOW));
+			}else if(isYellow){
+				report.pushMatchEvent(new MatchEvent(" for " + cardedPlayer.getName() + " " + away.getTeamName(), time, MatchAction.YELLOW));				
+			}
+		}
 	}
 	
+	public static Player findDirtiestBackPlayer(Team team){
+		List<Player> players = team.getTheTeam();
+		Player dirtyBastad = players.get(0);
+		for (Player player : players) {
+			List<Position> positions = player.getStats().getPositions();
+			if(positions.contains(Position.GOALKEEPER) || positions.contains(Position.DEFENSE)||positions.contains(Position.MIDFIELD)){
+				if(dirtyBastad .getStats().getPositions().contains(Position.FORWARD)){
+					dirtyBastad = player;
+				}else{
+					if(player.getStats().getDirtyness()>dirtyBastad.getStats().getDirtyness()){
+						dirtyBastad = player;
+					}
+				}
+			}
+		}
+		return dirtyBastad;
+	}
 	public static void runPenalty(Team home, Team away, MatchReport report, int time, boolean isHome){
 		//Check for foul
-		runPenaltyFoul(home, away, report, time, isHome);
+		runFoul(home, away, report, time, !isHome);
 		if(isHome){
 			Player player = findBestPenaltyTaker(home);
 			Player goaly = findGoalKeeper(away);
@@ -171,6 +256,7 @@ public class GameSimulator {
 		int whatHappend = rand.nextInt(100);
 		if(whatHappend < SHOT_FROM_CORNER){
 			//Shot
+			runShotChance(home,away,report,time,isHome);
 		}else if(whatHappend < SHOT_FROM_CORNER + FOUL_CHANCE_FROM_CORNER){
 			//Foul
 			if(isHome){
@@ -208,12 +294,12 @@ public class GameSimulator {
 	
 	public static void figureOutAction(Team home, Team away, MatchReport report, int time){
 		MatchAction action = actionMap.get(rand.nextInt(actionMap.size()-1));
-		if(action.equals(MatchAction.GOAL)){
-			runRandomGoal(home, away, report, time);
+		if(action.equals(MatchAction.SHOT)){
+			runRandomShot(home, away, report, time);
 		}else if(action.equals(MatchAction.CORNER)){
 			runCorner(home, away, report, time);
 		}else{			
-			report.pushMatchEvent(new MatchEvent("", time, action));
+		//	report.pushMatchEvent(new MatchEvent("", time, action));
 		}
 	}
 	
