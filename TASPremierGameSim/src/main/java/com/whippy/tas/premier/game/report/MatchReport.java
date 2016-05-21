@@ -5,11 +5,15 @@ import java.util.List;
 
 import com.whippy.tas.premier.beans.Team;
 
+import sun.nio.cs.ext.MacThai;
+
 public class MatchReport {
 	
 	private List<MatchEvent> matchEvents;
 	private Team homeTeam;
 	private Team awayTeam;
+	private int homeScore = 0;
+	private int awayScore = 0;
 
 	public MatchReport(Team homeTeam, Team awayTeam) {
 		this.homeTeam = homeTeam;
@@ -19,6 +23,22 @@ public class MatchReport {
 	
 	public void pushMatchEvent(MatchEvent event){
 		matchEvents.add(event);
+	}
+	
+	public void homeGoal(){
+		homeScore++;
+	}
+	
+	public int getHomeScore() {
+		return homeScore;
+	}
+
+	public int getAwayScore() {
+		return awayScore;
+	}
+
+	public void awayGoal(){
+		awayScore++;
 	}
 	
 	public String getPreGameSummary(){
@@ -38,6 +58,18 @@ public class MatchReport {
 	public String toString(){
 		StringBuilder reportBuilder = new StringBuilder();
 		reportBuilder.append(getPreGameSummary());
+		for (MatchEvent matchEvent : matchEvents) {
+			reportBuilder.append("\n");
+			reportBuilder.append(matchEvent.toString());
+		}
+		reportBuilder.append("\nThats all from here today, final score ");
+		reportBuilder.append(homeTeam.getTeamName());
+		reportBuilder.append(" ");
+		reportBuilder.append(homeScore);
+		reportBuilder.append(" - ");
+		reportBuilder.append(awayScore);
+		reportBuilder.append(" ");
+		reportBuilder.append(awayTeam.getTeamName());
 		return reportBuilder.toString();
 	}
 	

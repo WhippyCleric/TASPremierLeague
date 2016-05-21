@@ -3,7 +3,8 @@ package com.whippy.tas.premier.game.report;
 public enum MatchAction {
 
 	GOAL("GOAL"),
-	SHOT_MISS("Shot"),
+	SHOT("Shot"),
+	SHOT_MISS("Goes wide"),
 	SHOT_SAVE("Save"),
 	CORNER("Corner"),
 	FREE_KICK_DEF("Free kick in defenses half"),
