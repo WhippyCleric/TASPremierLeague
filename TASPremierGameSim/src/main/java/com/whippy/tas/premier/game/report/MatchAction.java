@@ -4,6 +4,7 @@ public enum MatchAction {
 
 	GOAL("GOAL"),
 	SHOT("Shot"),
+	SAVE("Saved"),
 	SHOT_MISS("Goes wide"),
 	SHOT_SAVE("Save"),
 	CORNER("Corner"),
