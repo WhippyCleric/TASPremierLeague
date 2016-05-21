@@ -25,6 +25,7 @@ public class GameSimulator {
 	private static final int SHOT_FROM_CORNER = 20;
 	private static final int CORNER_FROM_CORNER = 20;
 	private static final int FOUL_CHANCE_FROM_CORNER = 10;
+	private static final double HOME_ADVANTAGE = 1.2;
 	private static int CHANCE_OF_ACTION = 30;
 	private static Random rand = new Random();
 	private static Map<Integer, MatchAction> actionMap = new HashMap<Integer,MatchAction>();
@@ -81,6 +82,21 @@ public class GameSimulator {
 			runAttackingFreeKick(home, away, report, time);
 		}else if(action.equals(MatchAction.FREE_KICK_ATT)){	
 			runDefFreeKick(home, away, report, time);
+		}else if(action.equals(MatchAction.PENALTY)){
+			runRandomPenalty(home, away, report, time);
+		}
+	}
+
+	private static void runRandomPenalty(Team home, Team away, MatchReport report, int time) {
+		double team1PenaltyChance = getPassingStat(home) + getSpeedStat(home) - getTacklingStat(away);
+		double team2PenaltyChance = getPassingStat(away) + getSpeedStat(away) - getTacklingStat(home);
+		int penaltyTaker = rand.nextInt((int) Math.floor(team1PenaltyChance + team2PenaltyChance));
+		if(penaltyTaker<team1PenaltyChance){
+			runFoul(home, away, report, time, false);
+			runPenalty(home, away, report, time, true);
+		}else{
+			runFoul(home, away, report, time, true);
+			runPenalty(home, away, report, time, false);
 		}
 	}
 
