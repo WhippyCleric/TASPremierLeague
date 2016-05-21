@@ -1,3 +1,4 @@
+package com.whippy.tas.premier.player.gen;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -6,13 +7,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-
+import com.whippy.tas.premier.beans.Player;
+import com.whippy.tas.premier.beans.Position;
+import com.whippy.tas.premier.beans.Stats;
+import com.whippy.tas.premier.util.Utils;
 
 
 public class Generator {
 
-	
-	
 	private static final String FIRST_NAMES = "first.txt";
 	private static final String LAST_NAMES = "last.txt";
 	private static final int NUMBER_OF_PLAYERS = 1000;
@@ -21,8 +23,8 @@ public class Generator {
 
 	public static void main(String args[]) throws IOException{
 		Random rand = new Random();
-		List<String> firstNames = Utils.getNames(FIRST_NAMES);
-		List<String> lastNames = Utils.getNames(LAST_NAMES);
+		List<String> firstNames = Utils.getNames(FIRST_NAMES, Generator.class);
+		List<String> lastNames = Utils.getNames(LAST_NAMES, Generator.class);
 		System.out.println("Name,Value,Positions,Age,Shooting,Speed,Passing,Tackling,Leadership,Set Pieces,Dirtyness,Goal Keeping");
 		for(int i=0;i<NUMBER_OF_PLAYERS;i++){
 			Player player = new Player();
@@ -34,7 +36,6 @@ public class Generator {
 			player.setValue((int) (Math.floor(generateValue(stats))));
 			System.out.println(player);
 		}
-		
 	}
 	
 	private static double generateValue(Stats stats){

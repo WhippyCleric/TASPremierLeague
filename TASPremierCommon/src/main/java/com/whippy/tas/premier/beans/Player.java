@@ -1,3 +1,4 @@
+package com.whippy.tas.premier.beans;
 
 public class Player {
 

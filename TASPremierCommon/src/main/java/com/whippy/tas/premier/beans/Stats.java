@@ -1,8 +1,7 @@
+package com.whippy.tas.premier.beans;
 import java.util.List;
 
 public class Stats {
-
-	
 
 	private int shooting;
 	private int speed;
@@ -58,16 +57,6 @@ public class Stats {
 	public int getPassing() {
 		return passing;
 	}
-	@Override
-	public String toString() {
-		StringBuilder stringRep = new StringBuilder();
-		for (Position position : positions) {
-			stringRep.append(position.toString());
-			stringRep.append(" ");
-		}
-		stringRep.append("," + age + "," + shooting + "," + speed + "," + passing + "," + tackling + "," + leadership + "," + setPieces + "," + dirtyness + "," + goalKeeping);
-		return stringRep.toString();
-	}
 	public int getGoalKeeping() {
 		return goalKeeping;
 	}
@@ -86,6 +75,17 @@ public class Stats {
 	}
 	public void setPositions(List<Position> positions) {
 		this.positions = positions;
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder stringRep = new StringBuilder();
+		for (Position position : positions) {
+			stringRep.append(position.toString());
+			stringRep.append(" ");
+		}
+		stringRep.append("," + age + "," + shooting + "," + speed + "," + passing + "," + tackling + "," + leadership + "," + setPieces + "," + dirtyness + "," + goalKeeping);
+		return stringRep.toString();
 	}
 
 
