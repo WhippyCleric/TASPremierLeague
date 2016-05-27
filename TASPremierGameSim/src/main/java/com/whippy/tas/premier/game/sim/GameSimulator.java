@@ -25,7 +25,7 @@ public class GameSimulator {
 	private static final int SHOT_FROM_CORNER = 20;
 	private static final int CORNER_FROM_CORNER = 20;
 	private static final int FOUL_CHANCE_FROM_CORNER = 10;
-	private static final double HOME_ADVANTAGE = 1.2;
+	private static final double HOME_ADVANTAGE = 1.1;
 	private static int CHANCE_OF_ACTION = 30;
 	private static Random rand = new Random();
 	private static Map<Integer, MatchAction> actionMap = new HashMap<Integer,MatchAction>();
@@ -88,7 +88,7 @@ public class GameSimulator {
 	}
 
 	private static void runRandomPenalty(Team home, Team away, MatchReport report, int time) {
-		double team1PenaltyChance = getPassingStat(home) + getSpeedStat(home) - getTacklingStat(away);
+		double team1PenaltyChance = (getPassingStat(home) + getSpeedStat(home) - getTacklingStat(away)) * HOME_ADVANTAGE;
 		double team2PenaltyChance = getPassingStat(away) + getSpeedStat(away) - getTacklingStat(home);
 		int penaltyTaker = rand.nextInt((int) Math.floor(team1PenaltyChance + team2PenaltyChance));
 		if(penaltyTaker<team1PenaltyChance){
@@ -101,7 +101,7 @@ public class GameSimulator {
 	}
 
 	private static void runAttackingFreeKick(Team home, Team away, MatchReport report, int time) {
-		double team1FreeKickChance = getPassingStat(home) + getSpeedStat(home) - getTacklingStat(away);
+		double team1FreeKickChance = (getPassingStat(home) + getSpeedStat(home) - getTacklingStat(away)) * HOME_ADVANTAGE;
 		double team2FreeKickChance = getPassingStat(away) + getSpeedStat(away) - getTacklingStat(home);
 		int freeKicker = rand.nextInt((int) Math.floor(team1FreeKickChance + team2FreeKickChance));
 		if(freeKicker<team1FreeKickChance){
@@ -126,7 +126,7 @@ public class GameSimulator {
 	}
 
 	private static void runDefFreeKick(Team home, Team away, MatchReport report, int time) {
-		double team1FreeKickChance = getPassingStat(home) + getSpeedStat(home) - getTacklingStat(away);
+		double team1FreeKickChance = (getPassingStat(home) + getSpeedStat(home) - getTacklingStat(away)) * HOME_ADVANTAGE;
 		double team2FreeKickChance = getPassingStat(away) + getSpeedStat(away) - getTacklingStat(home);
 		int freeKicker = rand.nextInt((int) Math.floor(team1FreeKickChance + team2FreeKickChance));
 		if(freeKicker<team1FreeKickChance){
@@ -154,7 +154,7 @@ public class GameSimulator {
 	}
 
 	public static void runRandomShot(Team home, Team away, MatchReport report, int time){
-		double team1ScoreChance = getScoringStat(home) + getPassingStat(home) + (getSpeedStat(home)*2) - getTacklingStat(away);
+		double team1ScoreChance = (getScoringStat(home) + getPassingStat(home) + (getSpeedStat(home)*2) - getTacklingStat(away)) * HOME_ADVANTAGE;
 		double team2ScoreChance = getScoringStat(away) + getPassingStat(away) + (getSpeedStat(away)*2) - getTacklingStat(home);
 		int scorer = rand.nextInt((int) Math.floor(team1ScoreChance + team2ScoreChance));
 		if(scorer<team1ScoreChance){
@@ -216,7 +216,7 @@ public class GameSimulator {
 
 	public static void runCorner(Team home, Team away, MatchReport report, int time){
 		//Figure out whose corner
-		double team1CornerChance = getCornerStat(home);
+		double team1CornerChance = getCornerStat(home) * HOME_ADVANTAGE;
 		double team2CornerChance = getCornerStat(away);
 		int cornerOwner = rand.nextInt((int) Math.floor(team1CornerChance + team2CornerChance));
 		if(cornerOwner<team1CornerChance){
