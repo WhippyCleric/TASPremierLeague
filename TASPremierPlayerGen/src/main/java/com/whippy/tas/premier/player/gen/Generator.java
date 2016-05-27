@@ -105,7 +105,7 @@ public class Generator {
 			//Midfielders must have a tackling stat of at least 25
 			stats.setTackling(Utils.getGaussian(60, 20));
 		}else{
-			Utils.getGaussian(40, 40);
+			stats.setTackling(Utils.getGaussian(40, 40));
 		}
 		return stats;
 	}
