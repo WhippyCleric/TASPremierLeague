@@ -20,11 +20,16 @@ public class TeamBuilder {
 		List<String> names = Utils.getNames(teamFile, this.getClass());
 		String teamName = teamFile;
 		ArrayList<Player> theTeam = new ArrayList<Player>();
+		ArrayList<Player> theSubs = new ArrayList<Player>();
 		for (Player player : allPlayers) {
-			if(names.contains(player.getName())){
-				theTeam.add(player);
+			if(names.contains(player.getName().toUpperCase())){
+				if(names.indexOf(player.getName().toUpperCase())<11){					
+					theTeam.add(player);
+				}else{
+					theSubs.add(player);
+				}
 			}
 		}
-		return new Team(teamName, theTeam.subList(0, 11), theTeam.subList(11, 15));
+		return new Team(teamName, theTeam, theSubs);
 	}
 }

@@ -17,7 +17,7 @@ public class Utils {
 		List<String> names = new ArrayList<String>();
 		String line;
 		while ((line=r.readLine()) != null) {
-			names.add(line);
+			names.add(line.toUpperCase());
 		}
 		return names;
 	}

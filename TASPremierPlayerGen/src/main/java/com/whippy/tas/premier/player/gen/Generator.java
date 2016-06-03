@@ -21,6 +21,8 @@ public class Generator {
 	private static final int MIN_AGE = 16;
 	private static final int MAX_AGE = 38;
 
+
+	
 	public static void main(String args[]) throws IOException{
 		Random rand = new Random();
 		List<String> firstNames = Utils.getNames(FIRST_NAMES, Generator.class);
@@ -105,7 +107,7 @@ public class Generator {
 			//Midfielders must have a tackling stat of at least 25
 			stats.setTackling(Utils.getGaussian(60, 20));
 		}else{
-			Utils.getGaussian(40, 40);
+			stats.setTackling(Utils.getGaussian(40, 40));
 		}
 		return stats;
 	}
