@@ -258,13 +258,27 @@ public class GameSimulator {
 			}
 			if(isRed && isHome){
 				report.pushMatchEvent(new MatchEvent("for " + cardedPlayer.getName() + " " + home.getTeamName(), time, MatchAction.RED));
+				home.redCard(cardedPlayer);
 			}else if(isRed){
 				report.pushMatchEvent(new MatchEvent("for " + cardedPlayer.getName() + " " + away.getTeamName(), time, MatchAction.RED));				
+				away.redCard(cardedPlayer);
 			}
 			if(isYellow && isHome){
-				report.pushMatchEvent(new MatchEvent("for " + cardedPlayer.getName() + " " + home.getTeamName(), time, MatchAction.YELLOW));
+				if(cardedPlayer.isYellow()){
+					report.pushMatchEvent(new MatchEvent("for " + cardedPlayer.getName() + " " + home.getTeamName() + " that's his second of the game so he's gone", time, MatchAction.YELLOW));
+					home.redCard(cardedPlayer);
+				}else{
+					report.pushMatchEvent(new MatchEvent("for " + cardedPlayer.getName() + " " + home.getTeamName() , time, MatchAction.YELLOW));
+					cardedPlayer.setYellow(true);
+				}
 			}else if(isYellow){
-				report.pushMatchEvent(new MatchEvent("for " + cardedPlayer.getName() + " " + away.getTeamName(), time, MatchAction.YELLOW));				
+				if(cardedPlayer.isYellow()){
+					report.pushMatchEvent(new MatchEvent("for " + cardedPlayer.getName() + " " + away.getTeamName() + " that's his second of the game so he's gone", time, MatchAction.YELLOW));
+					away.redCard(cardedPlayer);
+				}else{
+					report.pushMatchEvent(new MatchEvent("for " + cardedPlayer.getName() + " " + away.getTeamName() , time, MatchAction.YELLOW));
+					cardedPlayer.setYellow(true);
+				}			
 			}
 		}
 	}

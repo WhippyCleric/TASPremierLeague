@@ -23,6 +23,10 @@ public class Team {
 		theTeam.add(on);
 	}
 	
+	public void redCard(Player off){
+		theTeam.remove(off);
+	}
+	
 	public String getTeamName() {
 		return teamName;
 	}

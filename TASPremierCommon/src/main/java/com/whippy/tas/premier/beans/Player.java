@@ -9,6 +9,7 @@ public class Player {
 	public String name;
 	private int value;
 	public Stats stats;
+	private boolean isYellow = false;
 	
 	public String getName() {
 		return name;
@@ -27,6 +28,12 @@ public class Player {
 	}
 	public void setValue(int value) {
 		this.value = value;
+	}
+	public boolean isYellow() {
+		return isYellow;
+	}
+	public void setYellow(boolean isYellow) {
+		this.isYellow = isYellow;
 	}
 	
 }

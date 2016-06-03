@@ -14,11 +14,21 @@ public class MatchReport {
 	private Team awayTeam;
 	private int homeScore = 0;
 	private int awayScore = 0;
+	private StringBuilder preGameSummary;
 
 	public MatchReport(Team homeTeam, Team awayTeam) {
 		this.homeTeam = homeTeam;
 		this.awayTeam = awayTeam;
 		matchEvents = new ArrayList<MatchEvent>();
+		 preGameSummary = new StringBuilder();
+		preGameSummary.append("Another fine day for a game of football with home side ");
+		preGameSummary.append(homeTeam.getTeamName());
+		preGameSummary.append(" facing off against ");
+		preGameSummary.append(awayTeam.getTeamName());
+		preGameSummary.append("\nLets take a look at the line ups: \n");
+		preGameSummary.append(homeTeam.toString());
+		preGameSummary.append("\n");
+		preGameSummary.append(awayTeam.toString());
 	}
 	
 	public void pushMatchEvent(MatchEvent event){
@@ -42,15 +52,6 @@ public class MatchReport {
 	}
 	
 	public String getPreGameSummary(){
-		StringBuilder preGameSummary = new StringBuilder();
-		preGameSummary.append("Another fine day for a game of football with home side ");
-		preGameSummary.append(homeTeam.getTeamName());
-		preGameSummary.append(" facing off against ");
-		preGameSummary.append(awayTeam.getTeamName());
-		preGameSummary.append("\nLets take a look at the line ups: \n");
-		preGameSummary.append(homeTeam.toString());
-		preGameSummary.append("\n");
-		preGameSummary.append(awayTeam.toString());
 		return preGameSummary.toString();
 	}
 	
